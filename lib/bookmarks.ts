@@ -1,4 +1,6 @@
-export const folders = [
+export type Folder = { id: string; name: string; color: string };
+
+export const folders: Folder[] = [
   { id: "design", name: "디자인 영감", color: "#a38ae5" },
   { id: "development", name: "개발 자료", color: "#709cdd" },
   { id: "articles", name: "읽고 싶은 글", color: "#dfaa65" },

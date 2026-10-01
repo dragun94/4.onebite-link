@@ -1,10 +1,10 @@
 import { useRef, useState, type FormEvent, type RefObject } from "react";
-import { folders, type Bookmark } from "@/lib/bookmarks";
+import type { Bookmark, Folder } from "@/lib/bookmarks";
 import Icon from "./icon";
 
-type Props = { dialogRef: RefObject<HTMLDialogElement | null>; onAdd: (bookmark: Bookmark) => void };
+type Props = { dialogRef: RefObject<HTMLDialogElement | null>; folders: Folder[]; onAdd: (bookmark: Bookmark) => void };
 
-export default function AddLinkDialog({ dialogRef, onAdd }: Props) {
+export default function AddLinkDialog({ dialogRef, folders, onAdd }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const [error, setError] = useState("");
 
@@ -34,7 +34,7 @@ export default function AddLinkDialog({ dialogRef, onAdd }: Props) {
         <label>링크 주소<input name="url" type="url" placeholder="https://example.com" required autoFocus /></label>
         <label>링크 이름<input name="title" placeholder="어떤 링크인가요?" maxLength={100} required /></label>
         <label>설명 <span className="optional">선택</span><textarea name="description" placeholder="기억해 두고 싶은 내용을 남겨보세요." maxLength={240} rows={3} /></label>
-        <label>폴더<select name="folder">{folders.map(folder => <option key={folder.id} value={folder.id}>{folder.name}</option>)}</select></label>
+        <label>폴더<select name="folder">{folders.map(folder => <option key={folder.id} value={folder.id}>{folder.name}</option>)}<option value="">미분류</option></select></label>
         {error && <p className="form-error" role="alert">{error}</p>}
         <p className="form-note">추가한 링크는 현재 페이지를 이용하는 동안 유지됩니다.</p>
         <button type="submit" className="primary-button"><Icon name="plus" size={18} />링크 추가하기</button>

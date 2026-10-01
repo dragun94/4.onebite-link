@@ -1,8 +1,7 @@
-import { folders, type Bookmark } from "@/lib/bookmarks";
+import type { Bookmark, Folder } from "@/lib/bookmarks";
 import Icon from "./icon";
 
-export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
-  const folder = folders.find(item => item.id === bookmark.folderId);
+export default function BookmarkCard({ bookmark, folder }: { bookmark: Bookmark; folder?: Folder }) {
   const domain = new URL(bookmark.url).hostname.replace(/^www\./, "");
   return (
     <article className="bookmark-card">
@@ -15,7 +14,7 @@ export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
         <div className="card-content">
           <div className="card-domain"><span className={`favicon favicon-${bookmark.cover}`}>{domain.charAt(0).toUpperCase()}</span>{domain}</div>
           <h2>{bookmark.title}</h2><p>{bookmark.description}</p>
-          <div className="card-footer"><span className={`folder-badge folder-${bookmark.folderId}`}><Icon name="folder" size={13} />{folder?.name}</span><time dateTime={bookmark.date}>{bookmark.date.replaceAll("-", ".")}</time></div>
+          <div className="card-footer"><span className={`folder-badge folder-${bookmark.folderId}`}><Icon name="folder" size={13} /><span>{folder?.name ?? "미분류"}</span></span><time dateTime={bookmark.date}>{bookmark.date.replaceAll("-", ".")}</time></div>
         </div>
       </a>
     </article>

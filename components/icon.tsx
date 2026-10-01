@@ -2,6 +2,8 @@ import type { CSSProperties } from "react";
 
 const paths = {
   plus: "M12 5v14M5 12h14",
+  edit: "m16 3 5 5M4 16 17 3a2 2 0 0 1 3 3L7 19l-4 1 1-4Z",
+  trash: "M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7",
   grid: "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
   folder: "M3 7V5a1 1 0 0 1 1-1h5l2 3h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z",
   search: "M21 21l-5-5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0",

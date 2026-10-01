@@ -1,9 +1,9 @@
-import { folders, type Bookmark } from "@/lib/bookmarks";
+import type { Bookmark, Folder } from "@/lib/bookmarks";
 import Icon from "./icon";
 
-type Props = { bookmarks: Bookmark[]; selected: string; onSelect: (id: string) => void };
+type Props = { bookmarks: Bookmark[]; folders: Folder[]; selected: string; onSelect: (id: string) => void; onRename: (folder: Folder) => void; onDelete: (folder: Folder) => void };
 
-export default function Sidebar({ bookmarks, selected, onSelect }: Props) {
+export default function Sidebar({ bookmarks, folders, selected, onSelect, onRename, onDelete }: Props) {
   return (
     <aside className="sidebar">
       <div className="workspace-label">MY WORKSPACE</div>
@@ -14,9 +14,15 @@ export default function Sidebar({ bookmarks, selected, onSelect }: Props) {
         <div className="folder-label">내 폴더<span>{folders.length}</span></div>
         <div className="folder-list">
           {folders.map(folder => (
-            <button key={folder.id} className={`nav-item ${selected === folder.id ? "active" : ""}`} onClick={() => onSelect(folder.id)} aria-current={selected === folder.id ? "page" : undefined}>
-              <span className={`folder-icon folder-${folder.id}`}><Icon name="folder" size={19} /></span><span>{folder.name}</span><span className="count">{bookmarks.filter(item => item.folderId === folder.id).length}</span>
-            </button>
+            <div key={folder.id} className={`folder-row ${selected === folder.id ? "selected" : ""}`}>
+              <button className={`nav-item ${selected === folder.id ? "active" : ""}`} onClick={() => onSelect(folder.id)} aria-current={selected === folder.id ? "page" : undefined}>
+                <span className={`folder-icon folder-${folder.id}`}><Icon name="folder" size={19} /></span><span className="folder-name" title={folder.name}>{folder.name}</span><span className="count">{bookmarks.filter(item => item.folderId === folder.id).length}</span>
+              </button>
+              <div className="folder-actions">
+                <button className="folder-action" onClick={() => onRename(folder)} aria-label={`${folder.name} 이름 변경`} title="이름 변경"><Icon name="edit" size={15} /></button>
+                <button className="folder-action delete-action" onClick={() => onDelete(folder)} aria-label={`${folder.name} 삭제`} title="폴더 삭제"><Icon name="trash" size={15} /></button>
+              </div>
+            </div>
           ))}
         </div>
       </nav>
