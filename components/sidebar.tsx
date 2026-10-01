@@ -9,13 +9,13 @@ export default function Sidebar({ bookmarks, selected, onSelect }: Props) {
       <div className="workspace-label">MY WORKSPACE</div>
       <nav aria-label="링크 폴더">
         <button className={`nav-item ${selected === "all" ? "active" : ""}`} onClick={() => onSelect("all")} aria-current={selected === "all" ? "page" : undefined}>
-          <Icon name="grid" size={18} /><span>All <span className="all-description">전체 링크</span></span><span className="count">{bookmarks.length}</span>
+          <Icon name="grid" size={18} /><span>전체 링크</span><span className="count">{bookmarks.length}</span>
         </button>
         <div className="folder-label">내 폴더<span>{folders.length}</span></div>
         <div className="folder-list">
           {folders.map(folder => (
             <button key={folder.id} className={`nav-item ${selected === folder.id ? "active" : ""}`} onClick={() => onSelect(folder.id)} aria-current={selected === folder.id ? "page" : undefined}>
-              <Icon name="folder" size={19} style={{ color: folder.color }} /><span>{folder.name}</span><span className="count">{bookmarks.filter(item => item.folderId === folder.id).length}</span>
+              <span className={`folder-icon folder-${folder.id}`}><Icon name="folder" size={19} /></span><span>{folder.name}</span><span className="count">{bookmarks.filter(item => item.folderId === folder.id).length}</span>
             </button>
           ))}
         </div>

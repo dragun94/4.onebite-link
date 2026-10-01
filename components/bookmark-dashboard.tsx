@@ -29,8 +29,8 @@ export default function BookmarkDashboard() {
           <div className="breadcrumb">내 라이브러리<span>/</span>{title}</div>
           <section aria-labelledby="page-title">
             <div className="page-heading">
-              <div><div className="eyebrow">YOUR LITTLE COLLECTION</div><h1 id="page-title">{title}<span className="title-dot">.</span></h1><p>발견하고, 모아두고, 다시 꺼내보세요.</p></div>
-              <div className="collection-mark" aria-hidden="true"><Icon name="bookmark" size={29} /><span>✦</span></div>
+              <div><div className="eyebrow">SAVE A LITTLE. INSPIRE A LOT.</div><h1 id="page-title">{title}<span className="title-dot">.</span></h1><p>좋은 발견을 모아, 나만의 영감으로.</p><div className="collection-summary"><span><Icon name="link" size={14} />{bookmarks.length}개의 발견</span><span><Icon name="folder" size={14} />{folders.length}개의 폴더</span></div></div>
+              <div className="collection-art" aria-hidden="true"><div className="art-card art-card-back"><Icon name="link" size={32} /></div><div className="art-card art-card-front"><Icon name="bookmark" size={38} /><i /><i /></div><span className="art-spark">✦</span></div>
             </div>
             <div className="toolbar">
               <div className="result-count">소중히 모은 링크 <strong aria-live="polite">{visible.length}</strong></div>
