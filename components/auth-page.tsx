@@ -18,10 +18,11 @@ export default function AuthPage({ mode, oauthError = false }: AuthPageProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [kakaoPending, setKakaoPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState(oauthError ? "카카오 로그인에 실패했어요. 다시 시도해 주세요." : "");
-  const canSubmit = Boolean(email.trim() && password.trim() && (!isSignup || confirmPassword.trim())) && !submitting;
+  const canSubmit = Boolean(email.trim() && password.trim() && (!isSignup || (confirmPassword.trim() && privacyAccepted))) && !submitting;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -130,6 +131,12 @@ export default function AuthPage({ mode, oauthError = false }: AuthPageProps) {
                 <label htmlFor="confirm-password" className="mb-2 block text-sm font-semibold text-[var(--foreground)]">비밀번호 확인</label>
                 <input id="confirm-password" name="confirm-password" type="password" autoComplete="new-password" value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} placeholder="비밀번호를 다시 입력해 주세요" className="auth-input w-full rounded-xl bg-[var(--input-bg)] px-4 py-3.5 text-[16px] text-[var(--foreground)] outline-none placeholder:text-[var(--placeholder)]" />
               </div>
+            )}
+            {isSignup && (
+              <label className="flex items-start gap-2.5 text-sm leading-6 text-[var(--text-sub)]">
+                <input type="checkbox" required checked={privacyAccepted} onChange={event => setPrivacyAccepted(event.target.checked)} className="mt-1 size-4 shrink-0 accent-[var(--accent)]" />
+                <span>[필수] <Link href="/privacy" className="auth-link text-[var(--accent)] underline underline-offset-2">개인정보 처리방침</Link>을 확인하고 동의합니다.</span>
+              </label>
             )}
             <button type="submit" disabled={!canSubmit} className="auth-submit mt-2 w-full rounded-xl bg-[var(--accent)] px-5 py-3.5 text-[17px] font-bold text-white">
               {submitting ? (isSignup ? "회원가입 중..." : "로그인 중...") : isSignup ? "회원가입" : "로그인"}

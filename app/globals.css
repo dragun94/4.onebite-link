@@ -184,5 +184,7 @@ input::placeholder, textarea::placeholder { color: #737e8c; }
 .sidebar-logout { display: flex; align-items: center; gap: 11px; width: 100%; margin-top: 18px; padding: 13px; border-radius: 12px; background: transparent; color: #4e5968; text-align: left; font-size: 14px; }
 .sidebar-logout:hover { background: #f4f6f9; color: #191f28; }
 .sidebar-logout:disabled { opacity: .6; cursor: wait; }
+.sidebar-privacy { display: block; width: fit-content; margin: 4px 0 0 13px; color: #8b95a1; font-size: 12px; }
+.sidebar-privacy:hover { color: #4e5968; text-decoration: underline; }
 .auth-toast { position: fixed; top: 20px; left: 50%; z-index: 50; width: min(440px, calc(100% - 40px)); transform: translateX(-50%); border-radius: 12px; background: #fff; padding: 16px 20px; color: #c52e3b; text-align: center; font-size: 14px; font-weight: 600; box-shadow: 0 8px 30px #191f2826; }
 @media (max-width: 760px) { .sidebar-logout { margin-top: 8px; padding: 11px 12px; } }

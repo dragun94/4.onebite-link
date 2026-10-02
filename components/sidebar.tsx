@@ -1,4 +1,5 @@
 import type { Bookmark, Folder } from "@/lib/bookmarks";
+import Link from "next/link";
 import Icon from "./icon";
 
 type Props = { bookmarks: Bookmark[]; folders: Folder[]; selected: string; onSelect: (id: string) => void; onRename: (folder: Folder) => void; onDelete: (folder: Folder) => void; onLogout: () => void; loggingOut: boolean };
@@ -31,6 +32,7 @@ export default function Sidebar({ bookmarks, folders, selected, onSelect, onRena
       <button type="button" className="sidebar-logout" onClick={onLogout} disabled={loggingOut}>
         <Icon name="logout" size={18} />{loggingOut ? "로그아웃 중..." : "로그아웃"}
       </button>
+      <Link href="/privacy" className="sidebar-privacy">개인정보 처리방침</Link>
     </aside>
   );
 }
