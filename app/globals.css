@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-:root { --background: #f4f6f9; --foreground: #191f28; --accent: #3182f6; --text-sub: #6b7684; color-scheme: light; }
+:root { --background: #f4f6f9; --foreground: #191f28; --accent: #3182f6; --text-sub: #6b7684; --surface: #fff; --input-bg: #f4f4f4; --placeholder: #737e8c; --error: #c52e3b; color-scheme: light; }
 * { box-sizing: border-box; }
 body { margin: 0; background: #f4f6f9; color: #191f28; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
 button, input, select, textarea { font: inherit; }
@@ -173,3 +173,8 @@ input::placeholder, textarea::placeholder { color: #737e8c; }
 @media (max-width: 760px) { .folder-row { flex-shrink: 0; max-width: 260px; } .folder-row .nav-item { width: 100%; } .folder-actions { opacity: 1; pointer-events: auto; } .folder-row .count { visibility: hidden; } .folder-action { min-height: 40px; } .secondary-button { padding: 11px 13px; font-size: 14px; } }
 @media (max-width: 380px) { .site-header { padding-inline: 12px; } .logo { font-size: 18px; gap: 7px; } .logo-mark { width: 30px; height: 30px; } .header-actions { gap: 6px; } .site-header .primary-button, .site-header .secondary-button { padding: 10px; font-size: 12px; gap: 4px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+.auth-input { transition: background .2s ease, box-shadow .2s ease; }
+.auth-input:focus { background: var(--surface); box-shadow: 0 0 0 2px var(--accent); }
+.auth-submit:hover { background: #1b64da; }
+.auth-submit:disabled, .auth-submit:disabled:hover { background: #dcdee3; color: #586576; cursor: not-allowed; box-shadow: none; transform: none; }
+.auth-link:hover { opacity: .8; }
