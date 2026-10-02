@@ -19,12 +19,32 @@ export default function BookmarkDashboard({ initialFolders, initialBookmarks }: 
   const [selected, setSelected] = useState("all");
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("newest");
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
   const dialogRef = useRef<HTMLDialogElement>(null);
   const visible = bookmarks.filter(item =>
     (selected === "all" || item.folderId === selected) &&
     `${item.title} ${item.description} ${item.url}`.toLowerCase().includes(query.trim().toLowerCase())
   ).sort((a, b) => sort === "name" ? a.title.localeCompare(b.title, "ko") : b.date.localeCompare(a.date));
   const title = selected === "all" ? "전체 링크" : folders.find(folder => folder.id === selected)?.name;
+
+  async function handleLogout() {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    setLogoutError("");
+    try {
+      const { error } = await createClient().auth.signOut({ scope: "local" });
+      if (error) {
+        setLogoutError("로그아웃하지 못했어요. 다시 시도해 주세요.");
+        return;
+      }
+      window.location.replace("/login");
+    } catch {
+      setLogoutError("로그아웃하지 못했어요. 인터넷 연결을 확인해 주세요.");
+    } finally {
+      setLoggingOut(false);
+    }
+  }
 
   async function confirmFolder(name: string) {
     if (!folderAction) return;
@@ -68,9 +88,10 @@ export default function BookmarkDashboard({ initialFolders, initialBookmarks }: 
 
   return (
     <div className="app-shell">
+      {logoutError && <div role="alert" className="auth-toast">{logoutError}</div>}
       <Header onAdd={() => dialogRef.current?.showModal()} onAddFolder={() => setFolderAction({ mode: "create" })} />
       <div className="workspace">
-        <Sidebar bookmarks={bookmarks} folders={folders} selected={selected} onSelect={setSelected} onRename={folder => setFolderAction({ mode: "rename", folder })} onDelete={folder => setFolderAction({ mode: "delete", folder })} />
+        <Sidebar bookmarks={bookmarks} folders={folders} selected={selected} onSelect={setSelected} onRename={folder => setFolderAction({ mode: "rename", folder })} onDelete={folder => setFolderAction({ mode: "delete", folder })} onLogout={handleLogout} loggingOut={loggingOut} />
         <main className="main-content">
           <div className="breadcrumb">내 라이브러리<span>/</span>{title}</div>
           <section aria-labelledby="page-title">

@@ -115,6 +115,12 @@ export default function AuthPage({ mode }: AuthPageProps) {
             </button>
           </form>
 
+          {!isSignup && (
+            <div className="mt-4 text-right text-sm">
+              <Link href="/forgot-password" className="auth-link font-semibold text-[var(--accent)]">비밀번호를 잊으셨나요?</Link>
+            </div>
+          )}
+
           <div className="mt-6 flex items-center justify-center gap-2 text-sm text-[var(--text-sub)]">
             <span>{isSignup ? "이미 계정이 있으신가요?" : "아직 계정이 없으신가요?"}</span>
             <Link href={isSignup ? "/login" : "/signup"} className="auth-link font-semibold text-[var(--accent)]">

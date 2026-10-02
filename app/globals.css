@@ -178,3 +178,8 @@ input::placeholder, textarea::placeholder { color: #737e8c; }
 .auth-submit:hover { background: #1b64da; }
 .auth-submit:disabled, .auth-submit:disabled:hover { background: #dcdee3; color: #586576; cursor: not-allowed; box-shadow: none; transform: none; }
 .auth-link:hover { opacity: .8; }
+.sidebar-logout { display: flex; align-items: center; gap: 11px; width: 100%; margin-top: 18px; padding: 13px; border-radius: 12px; background: transparent; color: #4e5968; text-align: left; font-size: 14px; }
+.sidebar-logout:hover { background: #f4f6f9; color: #191f28; }
+.sidebar-logout:disabled { opacity: .6; cursor: wait; }
+.auth-toast { position: fixed; top: 20px; left: 50%; z-index: 50; width: min(440px, calc(100% - 40px)); transform: translateX(-50%); border-radius: 12px; background: #fff; padding: 16px 20px; color: #c52e3b; text-align: center; font-size: 14px; font-weight: 600; box-shadow: 0 8px 30px #191f2826; }
+@media (max-width: 760px) { .sidebar-logout { margin-top: 8px; padding: 11px 12px; } }

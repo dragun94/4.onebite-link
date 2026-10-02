@@ -7,7 +7,7 @@ import { PassThrough } from "node:stream";
 import { gzipSync } from "node:zlib";
 import { normalizeLinkUrl } from "../lib/link-url.ts";
 import { extractMetadata, fetchOpenGraph, isPublicAddress, resolvePublicTarget } from "../lib/opengraph.ts";
-import { POST } from "../app/api/opengraph/route.ts";
+import { handleOpenGraph as POST } from "../lib/opengraph-route.ts";
 
 afterEach(() => mock.restoreAll());
 

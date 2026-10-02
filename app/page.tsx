@@ -1,10 +1,14 @@
 import BookmarkDashboard from "@/components/bookmark-dashboard";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { linkColumns, toBookmark } from "@/lib/saved-links";
 
 export default async function Home() {
   const supabase = createClient(await cookies());
+  const { data: authData, error: authError } = await supabase.auth.getClaims();
+  if (authError || !authData?.claims) redirect("/login");
+
   const [folderResult, linkResult] = await Promise.all([
     supabase.from("folders").select("id, name")
       .order("created_at", { ascending: true }).order("id", { ascending: true }),

@@ -1,9 +1,9 @@
 import type { Bookmark, Folder } from "@/lib/bookmarks";
 import Icon from "./icon";
 
-type Props = { bookmarks: Bookmark[]; folders: Folder[]; selected: string; onSelect: (id: string) => void; onRename: (folder: Folder) => void; onDelete: (folder: Folder) => void };
+type Props = { bookmarks: Bookmark[]; folders: Folder[]; selected: string; onSelect: (id: string) => void; onRename: (folder: Folder) => void; onDelete: (folder: Folder) => void; onLogout: () => void; loggingOut: boolean };
 
-export default function Sidebar({ bookmarks, folders, selected, onSelect, onRename, onDelete }: Props) {
+export default function Sidebar({ bookmarks, folders, selected, onSelect, onRename, onDelete, onLogout, loggingOut }: Props) {
   return (
     <aside className="sidebar">
       <div className="workspace-label">MY WORKSPACE</div>
@@ -28,6 +28,9 @@ export default function Sidebar({ bookmarks, folders, selected, onSelect, onRena
       </nav>
       <div className="sidebar-note"><span className="note-icon"><Icon name="bookmark" /></span><strong>발견의 순간을, 한입에.</strong><p>다시 보고 싶은 링크를 모아<br />나만의 영감으로 채워보세요.</p><span className="note-decoration" aria-hidden="true">✳</span></div>
       <div className="sidebar-footer"><span className="status-dot" />나만의 작은 링크 라이브러리</div>
+      <button type="button" className="sidebar-logout" onClick={onLogout} disabled={loggingOut}>
+        <Icon name="logout" size={18} />{loggingOut ? "로그아웃 중..." : "로그아웃"}
+      </button>
     </aside>
   );
 }
