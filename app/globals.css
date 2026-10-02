@@ -73,7 +73,9 @@ input::placeholder, textarea::placeholder { color: #737e8c; }
 .bookmark-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .bookmark-card { background: #fff; border-radius: 18px; overflow: hidden; min-width: 0; box-shadow: 0 2px 8px #191f2806, 0 8px 24px #191f2803; transition: transform .2s ease, box-shadow .2s ease; }
 .bookmark-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px #243f6814; }
-.card-link { display: block; height: 100%; }
+.card-link { display: block; }
+.link-card-actions { display: flex; justify-content: flex-end; gap: 4px; padding: 0 16px 12px; }
+.link-delete-title { overflow-wrap: anywhere; }
 .card-link:focus-visible { outline-offset: -4px; border-radius: 18px; }
 .card-cover { height: 156px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; margin: 8px 8px 0; border-radius: 12px; }
 .cover-brand { position: relative; font-family: Arial, sans-serif; font-size: 34px; font-weight: 700; letter-spacing: -1.5px; white-space: pre-line; text-align: center; line-height: 1.2; }

@@ -1,18 +1,21 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { folders as initialFolders, initialBookmarks } from "@/lib/bookmarks";
+import type { Bookmark, Folder } from "@/lib/bookmarks";
+import { createClient } from "@/utils/supabase/client";
 import Header from "./header";
 import Sidebar from "./sidebar";
 import BookmarkCard from "./bookmark-card";
 import AddLinkDialog from "./add-link-dialog";
 import Icon from "./icon";
 import FolderDialog, { type FolderAction } from "./folder-dialog";
+import LinkDialog, { type LinkAction } from "./link-dialog";
 
-export default function BookmarkDashboard() {
+export default function BookmarkDashboard({ initialFolders, initialBookmarks }: { initialFolders: Folder[]; initialBookmarks: Bookmark[] }) {
   const [bookmarks, setBookmarks] = useState(initialBookmarks);
   const [folders, setFolders] = useState(initialFolders);
   const [folderAction, setFolderAction] = useState<FolderAction | null>(null);
+  const [linkAction, setLinkAction] = useState<LinkAction | null>(null);
   const [selected, setSelected] = useState("all");
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("newest");
@@ -23,14 +26,40 @@ export default function BookmarkDashboard() {
   ).sort((a, b) => sort === "name" ? a.title.localeCompare(b.title, "ko") : b.date.localeCompare(a.date));
   const title = selected === "all" ? "전체 링크" : folders.find(folder => folder.id === selected)?.name;
 
-  function confirmFolder(name: string) {
+  async function confirmFolder(name: string) {
     if (!folderAction) return;
     if (folderAction.mode === "create") {
-      setFolders(items => [...items, { id: crypto.randomUUID(), name, color: "#3182f6" }]);
+      const { data, error } = await createClient()
+        .from("folders")
+        .insert({ name })
+        .select("id, name")
+        .single();
+
+      if (error) throw new Error("폴더를 추가하지 못했어요. 다시 시도해 주세요.");
+
+      setFolders(items => [...items, { id: String(data.id), name: data.name, color: "#3182f6" }]);
     } else if (folderAction.mode === "rename") {
-      setFolders(items => items.map(folder => folder.id === folderAction.folder.id ? { ...folder, name } : folder));
+      const { data, error } = await createClient()
+        .from("folders")
+        .update({ name })
+        .eq("id", folderAction.folder.id)
+        .select("id, name")
+        .single();
+
+      if (error) throw new Error("폴더 이름을 수정하지 못했어요. 다시 시도해 주세요.");
+
+      setFolders(items => items.map(folder => folder.id === String(data.id) ? { ...folder, name: data.name } : folder));
     } else {
       const id = folderAction.folder.id;
+      const { error } = await createClient()
+        .from("folders")
+        .delete()
+        .eq("id", id)
+        .select("id")
+        .single();
+
+      if (error) throw new Error("폴더를 삭제하지 못했어요. 다시 시도해 주세요.");
+
       setFolders(items => items.filter(folder => folder.id !== id));
       setBookmarks(items => items.map(bookmark => bookmark.folderId === id ? { ...bookmark, folderId: "" } : bookmark));
       if (selected === id) setSelected("all");
@@ -56,12 +85,13 @@ export default function BookmarkDashboard() {
                 <select aria-label="링크 정렬" value={sort} onChange={event => setSort(event.target.value)}><option value="newest">최신순</option><option value="name">이름순</option></select>
               </div>
             </div>
-            {visible.length ? <div className="bookmark-grid">{visible.map(bookmark => <BookmarkCard key={bookmark.id} bookmark={bookmark} folder={folders.find(folder => folder.id === bookmark.folderId)} />)}</div> : <div className="empty-state"><Icon name="search" size={32} /><h2>{query ? "검색 결과가 없어요" : "아직 모아둔 링크가 없어요"}</h2><p>{query ? "다른 검색어로 다시 찾아보세요." : "새 링크를 추가해 이 폴더를 채워보세요."}</p></div>}
+            {visible.length ? <div className="bookmark-grid">{visible.map(bookmark => <BookmarkCard key={bookmark.id} bookmark={bookmark} folder={folders.find(folder => folder.id === bookmark.folderId)} onEdit={() => setLinkAction({ mode: "edit", bookmark })} onDelete={() => setLinkAction({ mode: "delete", bookmark })} />)}</div> : <div className="empty-state"><Icon name="search" size={32} /><h2>{query ? "검색 결과가 없어요" : "아직 모아둔 링크가 없어요"}</h2><p>{query ? "다른 검색어로 다시 찾아보세요." : "새 링크를 추가해 이 폴더를 채워보세요."}</p></div>}
             <div className="collection-footer"><span />오늘의 발견이 내일의 영감이 되도록<span /></div>
           </section>
         </main>
       </div>
       <AddLinkDialog dialogRef={dialogRef} folders={folders} onAdd={bookmark => { setBookmarks(items => [bookmark, ...items]); setSelected("all"); setQuery(""); setSort("newest"); }} />
+      {linkAction && <LinkDialog action={linkAction} folders={folders} onSave={saved => setBookmarks(items => items.map(item => item.id === saved.id ? saved : item))} onDelete={id => setBookmarks(items => items.filter(item => item.id !== id))} onClose={() => setLinkAction(null)} />}
       {folderAction && <FolderDialog action={folderAction} folders={folders} linkCount={folderAction.mode === "create" ? 0 : bookmarks.filter(bookmark => bookmark.folderId === folderAction.folder.id).length} onConfirm={confirmFolder} onClose={() => setFolderAction(null)} />}
     </div>
   );
