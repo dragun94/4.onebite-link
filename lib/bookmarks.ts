@@ -16,6 +16,7 @@ export type Bookmark = {
   cover: string;
   brand: string;
   date: string;
+  thumbnail?: string | null;
 };
 
 export const initialBookmarks: Bookmark[] = [

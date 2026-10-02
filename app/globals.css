@@ -99,6 +99,8 @@ input::placeholder, textarea::placeholder { color: #737e8c; }
 .cover-custom .cover-brand { max-width: 90%; overflow-wrap: anywhere; font-size: 25px; }
 .open-link { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 28px; height: 28px; background: #ffffffed; color: #4e5968; border-radius: 8px; transition: transform .2s ease; }
 .card-link:hover .open-link { transform: translate(1px, -1px); }
+.card-thumbnail { object-fit: cover; }
+.open-link { z-index: 1; }
 .card-content { padding: 18px 20px 17px; }
 .card-domain { display: flex; align-items: center; gap: 7px; color: #6b7684; font-size: 11px; margin-bottom: 12px; overflow-wrap: anywhere; }
 .favicon { display: grid; place-items: center; flex-shrink: 0; width: 18px; height: 18px; border-radius: 5px; background: #f2f4f6; color: #4e5968; font-size: 10px; font-weight: 700; }
@@ -129,6 +131,11 @@ input::placeholder, textarea::placeholder { color: #737e8c; }
 .optional, .form-note { font-size: 12px; color: #6b7684; font-weight: 400; line-height: 1.7; }
 .optional { margin-left: 4px; }
 .form-error { color: #c52e3b; font-size: 13px; }
+.primary-button:disabled { background: #dce3ed; color: #586576; cursor: wait; box-shadow: none; transform: none; }
+.add-dialog input:disabled, .add-dialog select:disabled { color: #6b7684; cursor: wait; }
+.link-loading { display: flex; align-items: center; gap: 9px; color: #1b64da; font-size: 13px; }
+.loading-spinner { width: 16px; height: 16px; border: 2px solid #cfe2ff; border-top-color: #1b64da; border-radius: 50%; animation: loading-spin .8s linear infinite; flex-shrink: 0; }
+@keyframes loading-spin { to { transform: rotate(360deg); } }
 @media (min-width: 1500px) { .main-content { padding: 32px 56px; } .card-cover { height: 180px; } }
 @media (max-width: 1150px) { .sidebar { width: 210px; padding-inline: 14px; } .main-content { padding-inline: 28px; } .bookmark-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; } .sidebar-note { margin-top: 80px; } .collection-art { margin-right: 0; transform: scale(.85); width: 160px; } }
 @media (max-width: 760px) { .site-header { height: 72px; padding: 0 20px; } .logo { font-size: 21px; } .logo-mark { width: 34px; height: 34px; } .header-caption { display: none; } .primary-button { padding: 11px 15px; font-size: 14px; } .workspace { display: block; min-height: calc(100dvh - 72px); } .sidebar { width: 100%; padding: 12px 16px; } .workspace-label, .folder-label, .sidebar-note, .sidebar-footer { display: none; } .sidebar nav, .folder-list { display: flex; gap: 6px; } .sidebar nav { overflow-x: auto; padding: 3px; } .nav-item { width: auto; flex-shrink: 0; white-space: nowrap; padding: 11px 12px; gap: 7px; font-size: 13px; } .nav-item .count { margin-left: 0; } .main-content { padding: 24px 20px; } .breadcrumb { margin-bottom: 20px; } .page-heading { padding: 28px; } h1 { font-size: 28px; } .collection-art { transform: scale(.8); margin-right: -15px; } .card-content { padding: 16px; } .toolbar-controls { gap: 10px; } .search-box { width: 190px; } }
@@ -163,4 +170,4 @@ input::placeholder, textarea::placeholder { color: #737e8c; }
 @media (hover: none) { .folder-actions { opacity: 1; pointer-events: auto; } .folder-row .count { visibility: hidden; } .folder-action { min-height: 40px; } }
 @media (max-width: 760px) { .folder-row { flex-shrink: 0; max-width: 260px; } .folder-row .nav-item { width: 100%; } .folder-actions { opacity: 1; pointer-events: auto; } .folder-row .count { visibility: hidden; } .folder-action { min-height: 40px; } .secondary-button { padding: 11px 13px; font-size: 14px; } }
 @media (max-width: 380px) { .site-header { padding-inline: 12px; } .logo { font-size: 18px; gap: 7px; } .logo-mark { width: 30px; height: 30px; } .header-actions { gap: 6px; } .site-header .primary-button, .site-header .secondary-button { padding: 10px; font-size: 12px; gap: 4px; } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
