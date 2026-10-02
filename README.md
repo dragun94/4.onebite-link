@@ -20,6 +20,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Supabase Dashboard의 **Authentication → URL Configuration → Redirect URLs**에 개발 주소 `http://localhost:3000/auth/recovery`와 배포 주소 `https://<서비스 도메인>/auth/recovery`를 등록하세요. 비밀번호 찾기 화면은 현재 접속한 주소의 `/auth/recovery`를 이메일 링크의 돌아올 주소로 사용합니다. 비밀번호 재설정 이메일 템플릿을 직접 수정했다면 링크가 Supabase의 `{{ .ConfirmationURL }}`을 사용하거나 지정한 Redirect URL로 돌아오는지 확인하세요.
 
+## 카카오 로그인 설정
+
+1. Kakao Developers에서 앱의 **카카오 로그인**을 켜고 REST API 키와 Client Secret을 확인하세요. 카카오 로그인 Redirect URI에는 Supabase Dashboard의 **Authentication → Sign In / Providers → Kakao**에 표시된 `https://<project-ref>.supabase.co/auth/v1/callback` 주소를 등록하세요.
+2. Supabase Dashboard에서 Kakao 제공자를 활성화하고 REST API 키와 Client Secret을 입력하세요.
+3. Supabase의 **Authentication → URL Configuration → Redirect URLs**에 개발 주소 `http://localhost:3000/auth/kakao`와 배포 주소 `https://<서비스 도메인>/auth/kakao`를 등록하세요. 앱은 카카오 인증 후 이 주소에서 세션을 교환하고 홈으로 이동합니다.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

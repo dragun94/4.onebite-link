@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/utils/supabase/client";
@@ -8,16 +9,18 @@ import Icon from "./icon";
 
 type AuthPageProps = {
   mode: "login" | "signup";
+  oauthError?: boolean;
 };
 
-export default function AuthPage({ mode }: AuthPageProps) {
+export default function AuthPage({ mode, oauthError = false }: AuthPageProps) {
   const isSignup = mode === "signup";
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [kakaoPending, setKakaoPending] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(oauthError ? "카카오 로그인에 실패했어요. 다시 시도해 주세요." : "");
   const canSubmit = Boolean(email.trim() && password.trim() && (!isSignup || confirmPassword.trim())) && !submitting;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -72,6 +75,24 @@ export default function AuthPage({ mode }: AuthPageProps) {
     }
   }
 
+  async function handleKakaoLogin() {
+    if (kakaoPending) return;
+    setErrorMessage("");
+    setKakaoPending(true);
+    try {
+      const redirectTo = new URL("/auth/kakao", window.location.origin).toString();
+      const { error } = await createClient().auth.signInWithOAuth({
+        provider: "kakao",
+        options: { redirectTo },
+      });
+      if (error) setErrorMessage("카카오 로그인을 시작하지 못했어요. 다시 시도해 주세요.");
+    } catch {
+      setErrorMessage("카카오 로그인을 시작하지 못했어요. 인터넷 연결을 확인해 주세요.");
+    } finally {
+      setKakaoPending(false);
+    }
+  }
+
   return (
     <main className="flex min-h-dvh w-full items-center justify-center px-5 py-12">
       {errorMessage && (
@@ -113,6 +134,11 @@ export default function AuthPage({ mode }: AuthPageProps) {
             <button type="submit" disabled={!canSubmit} className="auth-submit mt-2 w-full rounded-xl bg-[var(--accent)] px-5 py-3.5 text-[17px] font-bold text-white">
               {submitting ? (isSignup ? "회원가입 중..." : "로그인 중...") : isSignup ? "회원가입" : "로그인"}
             </button>
+            {!isSignup && (
+              <button type="button" onClick={handleKakaoLogin} disabled={kakaoPending} aria-label="카카오 로그인" className="auth-kakao-button w-full overflow-hidden rounded-xl">
+                <Image src="/kakao_login_large_wide.png" alt="" width={600} height={90} className="h-auto w-full" priority />
+              </button>
+            )}
           </form>
 
           {!isSignup && (

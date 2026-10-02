@@ -178,6 +178,9 @@ input::placeholder, textarea::placeholder { color: #737e8c; }
 .auth-submit:hover { background: #1b64da; }
 .auth-submit:disabled, .auth-submit:disabled:hover { background: #dcdee3; color: #586576; cursor: not-allowed; box-shadow: none; transform: none; }
 .auth-link:hover { opacity: .8; }
+.auth-kakao-button { background: #fee500; transition: opacity .2s ease, transform .2s ease; }
+.auth-kakao-button:hover { opacity: .88; }
+.auth-kakao-button:disabled { opacity: .65; cursor: wait; }
 .sidebar-logout { display: flex; align-items: center; gap: 11px; width: 100%; margin-top: 18px; padding: 13px; border-radius: 12px; background: transparent; color: #4e5968; text-align: left; font-size: 14px; }
 .sidebar-logout:hover { background: #f4f6f9; color: #191f28; }
 .sidebar-logout:disabled { opacity: .6; cursor: wait; }

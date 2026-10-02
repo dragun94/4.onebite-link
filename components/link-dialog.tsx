@@ -12,12 +12,13 @@ export type LinkAction = { mode: "edit" | "delete"; bookmark: Bookmark };
 type Props = {
   action: LinkAction;
   folders: Folder[];
+  userId: string;
   onSave: (bookmark: Bookmark) => void;
   onDelete: (id: string) => void;
   onClose: () => void;
 };
 
-export default function LinkDialog({ action, folders, onSave, onDelete, onClose }: Props) {
+export default function LinkDialog({ action, folders, userId, onSave, onDelete, onClose }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const submittingRef = useRef(false);
   const [pending, setPending] = useState(false);
@@ -37,7 +38,7 @@ export default function LinkDialog({ action, folders, onSave, onDelete, onClose 
     try {
       const supabase = createClient();
       if (deleting) {
-        const { error } = await supabase.from("links").delete().eq("id", bookmark.id).select("id").single();
+        const { error } = await supabase.from("links").delete().eq("id", bookmark.id).eq("user_id", userId).select("id").single();
         if (error) throw new Error("링크를 삭제하지 못했어요. 다시 시도해 주세요.");
         onDelete(bookmark.id);
       } else {
@@ -48,7 +49,7 @@ export default function LinkDialog({ action, folders, onSave, onDelete, onClose 
           description: String(form.get("description") ?? "").trim() || null,
           thumbnail1_url: thumbnail ? normalizeLinkUrl(thumbnail) : null,
           folder_id: String(form.get("folder") ?? "") || null,
-        }).eq("id", bookmark.id).select(linkColumns).single();
+        }).eq("id", bookmark.id).eq("user_id", userId).select(linkColumns).single();
         if (error) throw new Error("링크를 수정하지 못했어요. 다시 시도해 주세요.");
         onSave(toBookmark(data));
       }

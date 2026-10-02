@@ -11,7 +11,7 @@ import Icon from "./icon";
 import FolderDialog, { type FolderAction } from "./folder-dialog";
 import LinkDialog, { type LinkAction } from "./link-dialog";
 
-export default function BookmarkDashboard({ initialFolders, initialBookmarks }: { initialFolders: Folder[]; initialBookmarks: Bookmark[] }) {
+export default function BookmarkDashboard({ userId, initialFolders, initialBookmarks }: { userId: string; initialFolders: Folder[]; initialBookmarks: Bookmark[] }) {
   const [bookmarks, setBookmarks] = useState(initialBookmarks);
   const [folders, setFolders] = useState(initialFolders);
   const [folderAction, setFolderAction] = useState<FolderAction | null>(null);
@@ -63,6 +63,7 @@ export default function BookmarkDashboard({ initialFolders, initialBookmarks }: 
         .from("folders")
         .update({ name })
         .eq("id", folderAction.folder.id)
+        .eq("user_id", userId)
         .select("id, name")
         .single();
 
@@ -75,6 +76,7 @@ export default function BookmarkDashboard({ initialFolders, initialBookmarks }: 
         .from("folders")
         .delete()
         .eq("id", id)
+        .eq("user_id", userId)
         .select("id")
         .single();
 
@@ -112,7 +114,7 @@ export default function BookmarkDashboard({ initialFolders, initialBookmarks }: 
         </main>
       </div>
       <AddLinkDialog dialogRef={dialogRef} folders={folders} onAdd={bookmark => { setBookmarks(items => [bookmark, ...items]); setSelected("all"); setQuery(""); setSort("newest"); }} />
-      {linkAction && <LinkDialog action={linkAction} folders={folders} onSave={saved => setBookmarks(items => items.map(item => item.id === saved.id ? saved : item))} onDelete={id => setBookmarks(items => items.filter(item => item.id !== id))} onClose={() => setLinkAction(null)} />}
+      {linkAction && <LinkDialog action={linkAction} folders={folders} userId={userId} onSave={saved => setBookmarks(items => items.map(item => item.id === saved.id ? saved : item))} onDelete={id => setBookmarks(items => items.filter(item => item.id !== id))} onClose={() => setLinkAction(null)} />}
       {folderAction && <FolderDialog action={folderAction} folders={folders} linkCount={folderAction.mode === "create" ? 0 : bookmarks.filter(bookmark => bookmark.folderId === folderAction.folder.id).length} onConfirm={confirmFolder} onClose={() => setFolderAction(null)} />}
     </div>
   );

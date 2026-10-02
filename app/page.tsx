@@ -8,11 +8,12 @@ export default async function Home() {
   const supabase = createClient(await cookies());
   const { data: authData, error: authError } = await supabase.auth.getClaims();
   if (authError || !authData?.claims) redirect("/login");
+  const userId = authData.claims.sub;
 
   const [folderResult, linkResult] = await Promise.all([
-    supabase.from("folders").select("id, name")
+    supabase.from("folders").select("id, name").eq("user_id", userId)
       .order("created_at", { ascending: true }).order("id", { ascending: true }),
-    supabase.from("links").select(linkColumns)
+    supabase.from("links").select(linkColumns).eq("user_id", userId)
       .order("created_at", { ascending: false }).order("id", { ascending: false }),
   ]);
 
@@ -23,5 +24,5 @@ export default async function Home() {
     id: String(folder.id), name: folder.name, color: "#3182f6",
   }));
 
-  return <BookmarkDashboard initialFolders={folders} initialBookmarks={linkResult.data.map(toBookmark)} />;
+  return <BookmarkDashboard userId={userId} initialFolders={folders} initialBookmarks={linkResult.data.map(toBookmark)} />;
 }
